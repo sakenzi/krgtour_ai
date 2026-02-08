@@ -1,0 +1,177 @@
+{% load static %}
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>KrgTour AI</title>
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body>
+
+<header class="header" id="header">
+  <div class="header__inner">
+    <a class="brand" href="/">
+      <span class="brand__dot"></span>
+      <span class="brand__name">KrgTour AI</span>
+    </a>
+
+    <nav class="nav">
+      <a class="nav__link" href="#popular">Популярное</a>
+      <a class="nav__link" href="#routes">Маршруты</a>
+
+      <div class="nav__auth">
+        {% if user.is_authenticated %}
+          <span class="nav__user">{{ user.username }}</span>
+          <form action="{% url 'logout' %}" method="post" class="inline">
+            {% csrf_token %}
+            <button class="btn btn--ghost" type="submit">Выйти</button>
+          </form>
+        {% else %}
+          <a class="btn btn--ghost" href="{% url 'login' %}">Войти</a>
+        {% endif %}
+      </div>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero__bg"></div>
+  <div class="hero__content">
+    <h1 class="hero__title">Маршруты по Карагандинской области</h1>
+    <p class="hero__subtitle">Быстрый поиск, удобные карточки, рекомендации (пока моковые данные).</p>
+
+    <div class="search" id="search">
+      <div class="search__row">
+        <div class="field">
+          <label class="field__label">Направление</label>
+          <input class="field__input" id="q" type="text" placeholder="Например: Каркаралы, Балхаш, Бектау-Ата">
+        </div>
+
+        <div class="field">
+          <label class="field__label">Сложность</label>
+          <select class="field__input" id="difficulty">
+            <option value="all">Любая</option>
+            <option value="Лёгкий">Лёгкий</option>
+            <option value="Средний">Средний</option>
+            <option value="Сложный">Сложный</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label class="field__label">Длительность</label>
+          <select class="field__input" id="duration">
+            <option value="all">Любая</option>
+            <option value="1 день">1 день</option>
+            <option value="2 дня">2 дня</option>
+            <option value="3+ дня">3+ дня</option>
+          </select>
+        </div>
+
+        <button class="btn btn--primary search__btn" id="apply" type="button">
+          Найти
+        </button>
+      </div>
+
+      <div class="search__meta">
+        <span class="chip" id="resultCount">Маршрутов: —</span>
+        <button class="btn btn--link" id="reset" type="button">Сбросить</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<main class="container">
+  <section class="section" id="popular">
+    <div class="section__head">
+      <h2 class="section__title">Популярные направления</h2>
+      <p class="section__desc">Короткие карточки — как витрина.</p>
+    </div>
+
+    <div class="mini-grid">
+      <article class="mini-card" data-jump="Каркаралинские горы">
+        <div class="mini-card__icon">🏔️</div>
+        <div>
+          <div class="mini-card__title">Каркаралы</div>
+          <div class="mini-card__text">Горы, лес, озёра</div>
+        </div>
+      </article>
+
+      <article class="mini-card" data-jump="Озеро Балхаш">
+        <div class="mini-card__icon">🌊</div>
+        <div>
+          <div class="mini-card__title">Балхаш</div>
+          <div class="mini-card__text">Вода, пляжи, закаты</div>
+        </div>
+      </article>
+
+      <article class="mini-card" data-jump="Бектау-Ата">
+        <div class="mini-card__icon">🪨</div>
+        <div>
+          <div class="mini-card__title">Бектау-Ата</div>
+          <div class="mini-card__text">Скалы, треккинг</div>
+        </div>
+      </article>
+
+      <article class="mini-card" data-jump="Темиртау">
+        <div class="mini-card__icon">🏙️</div>
+        <div>
+          <div class="mini-card__title">Темиртау</div>
+          <div class="mini-card__text">Город и прогулки</div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" id="routes">
+    <div class="section__head">
+      <h2 class="section__title">Рекомендуемые маршруты</h2>
+      <p class="section__desc">Сейчас фильтруются на клиенте (JS), позже подключим БД.</p>
+    </div>
+
+    <div class="grid" id="grid">
+      {% for r in routes %}
+      <article class="card route-card"
+               data-title="{{ r.title }}"
+               data-difficulty="{{ r.difficulty }}"
+               data-duration="{{ r.duration }}">
+        <div class="card__media">
+          <img class="card__img" src="{{ r.image }}" alt="{{ r.title }}">
+          <div class="badge">{{ r.difficulty }}</div>
+        </div>
+        <div class="card__body">
+          <h3 class="card__title">{{ r.title }}</h3>
+          <div class="card__meta">
+            <span class="pill">⏱ {{ r.duration }}</span>
+            <span class="pill">💰 {{ r.price }}</span>
+          </div>
+
+          <button class="btn btn--ghost btn--full js-open" type="button">
+            Подробнее
+          </button>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+</main>
+
+<div class="modal" id="modal" aria-hidden="true">
+  <div class="modal__overlay" data-close></div>
+  <div class="modal__panel" role="dialog" aria-modal="true">
+    <button class="modal__close" type="button" data-close>✕</button>
+    <h3 class="modal__title" id="modalTitle">Маршрут</h3>
+    <p class="modal__text" id="modalText">Описание появится позже, когда подключим БД.</p>
+    <div class="modal__actions">
+      <button class="btn btn--primary" type="button" data-close>Понятно</button>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer__inner">KrgTour AI © 2026</div>
+</footer>
+
+<script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>
