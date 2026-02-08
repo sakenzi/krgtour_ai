@@ -1,0 +1,41 @@
+{% extends "registration/_auth_base.html" %}
+
+{% block title %}Регистрация — KrgTour AI{% endblock %}
+{% block heading %}Регистрация{% endblock %}
+{% block sub %}Создай аккаунт, чтобы сохранять маршруты и получать рекомендации{% endblock %}
+
+{% block content %}
+<form method="post" class="auth-form">
+  {% csrf_token %}
+
+  <div class="field">
+    <label class="field__label">Имя пользователя</label>
+    {{ form.username }}
+    {% if form.username.errors %}<div class="field__err">{{ form.username.errors }}</div>{% endif %}
+  </div>
+
+  <div class="field">
+    <label class="field__label">Email (optional)</label>
+    {{ form.email }}
+    {% if form.email.errors %}<div class="field__err">{{ form.email.errors }}</div>{% endif %}
+  </div>
+
+  <div class="field">
+    <label class="field__label">Пароль</label>
+    {{ form.password1 }}
+    {% if form.password1.errors %}<div class="field__err">{{ form.password1.errors }}</div>{% endif %}
+  </div>
+
+  <div class="field">
+    <label class="field__label">Повторите пароль</label>
+    {{ form.password2 }}
+    {% if form.password2.errors %}<div class="field__err">{{ form.password2.errors }}</div>{% endif %}
+  </div>
+
+  <button class="btn btn--primary btn--full" type="submit">Зарегистрироваться</button>
+
+  <div class="auth-links">
+    <a class="btn btn--ghost btn--full" href="{% url 'login' %}">Уже есть аккаунт? Войти</a>
+  </div>
+</form>
+{% endblock %}

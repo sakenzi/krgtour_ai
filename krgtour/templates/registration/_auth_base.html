@@ -1,0 +1,52 @@
+{% load static %}
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}KrgTour AI{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body class="page">
+
+<header class="header">
+  <div class="header__inner">
+    <a class="brand" href="/">
+      <span class="brand__dot"></span>
+      <span class="brand__name">KrgTour AI</span>
+    </a>
+    <nav class="nav">
+      <a class="nav__link" href="/">Главная</a>
+      <a class="nav__link" href="/#routes">Маршруты</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" style="padding:54px 20px 24px;">
+  <div class="hero__bg"></div>
+
+  <div class="hero__content" style="max-width:520px;">
+    <div class="auth-card">
+      <div class="auth-card__head">
+        <h1 class="auth-card__title">{% block heading %}{% endblock %}</h1>
+        <p class="auth-card__sub">{% block sub %}{% endblock %}</p>
+      </div>
+
+      {% if form.non_field_errors %}
+        <div class="alert alert--error">
+          {{ form.non_field_errors }}
+        </div>
+      {% endif %}
+
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer__inner">KrgTour AI © 2026</div>
+</footer>
+
+<script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

@@ -1,24 +1,28 @@
-<!doctype html>
-<html>
-<head><meta charset="utf-8"><title>Login</title></head>
-<body>
-  <h1>Login</h1>
+{% extends "registration/_auth_base.html" %}
 
-  {% if form.errors %}
-    <p style="color:red;">Wrong username or password.</p>
-  {% endif %}
+{% block title %}Войти — KrgTour AI{% endblock %}
+{% block heading %}Войти{% endblock %}
 
-  <form method="post">
-    {% csrf_token %}
-    <div>
-      <label>Username</label><br>
-      {{ form.username }}
-    </div>
-    <div>
-      <label>Password</label><br>
-      {{ form.password }}
-    </div>
-    <button type="submit">Sign in</button>
-  </form>
-</body>
-</html>
+{% block content %}
+<form method="post" class="auth-form">
+  {% csrf_token %}
+
+  <div class="field">
+    <label class="field__label">Имя пользователя</label>
+    {{ form.username }}
+    {% if form.username.errors %}<div class="field__err">{{ form.username.errors }}</div>{% endif %}
+  </div>
+
+  <div class="field">
+    <label class="field__label">Пароль</label>
+    {{ form.password }}
+    {% if form.password.errors %}<div class="field__err">{{ form.password.errors }}</div>{% endif %}
+  </div>
+
+  <button class="btn btn--primary btn--full" type="submit">Войти</button>
+
+  <div class="auth-links">
+    <a class="btn btn--ghost btn--full" href="{% url 'accounts:signup' %}">Создать аккаунт</a>
+  </div>
+</form>
+{% endblock %}
