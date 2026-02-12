@@ -4,16 +4,6 @@ from .models import Route
 from django.shortcuts import render
 
 
-# @login_required
-# def route_list(request):
-#     routes = Route.objects.order_by("-created_at")
-#     return render(request, "routes/route_list.html", {"routes": routes})
-
-# @login_required
-# def route_detail(request, route_id: int):
-#     route = get_object_or_404(Route, id=route_id)
-#     return render(request, "routes/route_detail.html", {"route": route})
-
 def home(request):
     routes = [
         {"title": "Каркаралинские горы", "duration": "1 день", "difficulty": "Средний", "price": "Бесплатно",
